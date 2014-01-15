@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# check parameters
+if [ $# -ne 2 ]; then
+	echo pcreator [project_name] [path]
+	exit
+fi
+
+# copy prototype dir
+cp -fr prototype $2/$1
+
+# create update
+echo "cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=$1 ../src">$2/$1/debug/update
+chmod 775 $2/$1/debug/update
+echo "cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$1 ../src">$2/$1/release/update
+chmod 775 $2/$1/release/update
+echo cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=$1 ..\\src>$2/$1/debug/update.bat
+echo cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$1 ..\\src>$2/$1/release/update.bat
+

@@ -6,6 +6,8 @@ if [ $# -ne 2 ]; then
 	exit
 fi
 
+mkdir -p $2
+
 # copy prototype dir
 cp -fr prototype $2/$1
 

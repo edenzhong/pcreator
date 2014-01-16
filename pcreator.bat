@@ -4,6 +4,8 @@
 if "%1" == "" goto usage
 if "%2" == "" goto usage
 
+md %2
+
 ::copy prototype dir
 xcopy prototype %2\%1 /E /I
 

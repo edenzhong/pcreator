@@ -50,13 +50,14 @@ else
 	BUILD_TYPE="debug"
 fi
 
-
+# handle actions
 if [ $TO_UPDATE -eq 1 ] ; then
 	echo "to update cmake"
 	cd debug
 	cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=$PRJ_NAME ..
 	cd ../release
 	cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$PRJ_NAME ..
+	cd ..
 fi
 
 if [ $BUILD_TYPE == "debug" ] ; then
@@ -73,14 +74,26 @@ fi
 
 if [ $RUN_DEBUG == "run" ];then
 	echo "to run"
+	if [ $BUILD_TYPE == "nil" ] ; then
+		cd debug # default run the debug version
+	fi
+	$PRJ_NAME
 fi
 
 if [ $RUN_DEBUG == "debug" ];then
 	echo "to debug"
+	if [ $BUILD_TYPE == "nil" ] ; then
+		cd debug # default run the debug version
+	fi
+	gdb $PRJ_NAME
 fi
 
 if [ $TO_TEST == 1 ] ; then
 	echo "run unit test"
+	if [ $BUILD_TYPE == "nil" ] ; then
+		cd debug # default run the debug version
+	fi
+	${PRJ_NAME}_test
 fi
 
 

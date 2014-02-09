@@ -1,0 +1,4 @@
+@goto windows >/dev/null 2>&1 >nul
+#!/bin/bash
+
+# This script can be run in both windows and linux.

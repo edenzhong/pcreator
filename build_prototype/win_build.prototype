@@ -1,0 +1,77 @@
+set BUILD_TYPE=nil
+set RUN_DEBUG=nil
+set TO_TEST=0
+set TO_UPDATE=0
+
+:: parse arg
+:parse_arg
+if "%1" == "" goto end_parse_arg
+if "%1" == "debug" set BUILD_TYPE="debug"
+if "%1" == "release" set BUILD_TYPE="release"
+if "%1" == "update" set TO_UPDATE=1
+if "%1" == "run" set RUN_DEBUG="run"
+if "%1" == "gdb" set RUN_DEBUG="debug"
+if "%1" == "test" set TO_TEST=1
+shift
+goto parse_arg
+:end_parse_arg
+
+:: handle action
+if %TO_UPDATE% == 1 goto to_update
+:end_update
+
+if %BUILD_TYPE% == "debug" goto make_debug
+:end_make_debug
+
+if %BUILD_TYPE% == "release" goto make_release
+:end_make_release
+
+if %RUN_DEBUG% == "run" goto run_exe
+:end_run_exe
+
+if %RUN_DEBUG% == "debug" goto debug_exe
+:end_debug_exe
+
+if %TO_TEST% == 1 goto to_test
+:end_test
+
+goto end_build
+
+:to_update
+if not exist debug md debug
+cd debug
+cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=$PRJ_NAME ..
+cd ..
+if not exist release md release
+cd release
+cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$PRJ_NAME ..
+cd ..
+goto end_update
+
+:make_debug
+cd debug
+make
+goto end_make_debug
+
+:make_release
+cd release
+make
+goto end_make_release
+
+:run_exe
+if %BUILD_TYPE% == nil cd debug :: default run debug
+%PRJ_NAME%
+:end_run_exe
+
+:debug_exe
+if %BUILD_TYPE% == nil cd debug :: default run debug
+::gdb %PRJ_NAME%
+echo Not implement.
+:end_debug_exe
+
+:to_test
+if %BUILD_TYPE% == nil cd debug :: default test debug
+%PRJ_NAME%_test
+:end_to_test
+
+:end_build

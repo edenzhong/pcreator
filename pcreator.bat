@@ -15,19 +15,15 @@ mkdir -p $2
 # copy prototype dir
 cp -fr prototype $2/$1
 
-# create update for debug
-echo "cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=$1 ../src">>$2/$1/debug/update.bat
-echo "exit 0">>$2/$1/debug/update.bat
-echo ":windows">>$2/$1/debug/update.bat
-echo cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=$1 ..\\src>>$2/$1/debug/update.bat
-chmod 775 $2/$1/debug/update.bat
-
-#create update for release
-echo "cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$1 ../src">>$2/$1/release/update.bat
-echo "exit 0">>$2/$1/release/update.bat
-echo ":windows">>$2/$1/release/update.bat
-echo cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$1 ..\\src>>$2/$1/release/update.bat
-chmod 775 $2/$1/release/update.bat
+# create build.bat
+cp -f build_prototype/build_header.prototype $2/$1/build.bat
+echo "PRJ_NAME=$1" >> $2/$1/build.bat
+cat build_prototype/unix_build.prototype >> $2/$1/build.bat
+echo ":windows" >> $2/$1/build.bat
+echo "@echo off" >> $2/$1/build.bat
+echo "set PRJ_NAME=$1" >> $2/$1/build.bat
+cat build_prototype/win_build.prototype >> $2/$1/build.bat
+chmod 775 $2/$1/build.bat
 
 exit 0
 

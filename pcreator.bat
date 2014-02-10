@@ -39,7 +39,7 @@ if "%2" == "" goto usage
 md %2
 
 ::copy prototype dir
-xcopy prototype %2\%1 \E \I
+xcopy prototype %2\%1 /E /I
 
 
 :: create build.bat

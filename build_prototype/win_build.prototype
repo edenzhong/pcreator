@@ -40,11 +40,11 @@ goto end_build
 :to_update
 if not exist debug md debug
 cd debug
-cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=$PRJ_NAME ..
+cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=%PRJ_NAME% ..
 cd ..
 if not exist release md release
 cd release
-cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$PRJ_NAME ..
+cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=%PRJ_NAME% ..
 cd ..
 goto end_update
 

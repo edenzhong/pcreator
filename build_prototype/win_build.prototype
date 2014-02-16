@@ -2,6 +2,7 @@ set BUILD_TYPE=nil
 set RUN_DEBUG=nil
 set TO_TEST=0
 set TO_UPDATE=0
+set TO_CLEAN=0
 
 :: parse arg
 :parse_arg
@@ -12,6 +13,7 @@ if "%1" == "update" set TO_UPDATE=1
 if "%1" == "run" set RUN_DEBUG="run"
 if "%1" == "gdb" set RUN_DEBUG="debug"
 if "%1" == "test" set TO_TEST=1
+if "%1" == "clean" set TO_CLEAN=1
 shift
 goto parse_arg
 :end_parse_arg
@@ -19,6 +21,9 @@ goto parse_arg
 :: handle action
 if %TO_UPDATE% == 1 goto to_update
 :end_update
+
+if %TO_CLEAN% == 1 goto to_clean
+:end_clean
 
 if %BUILD_TYPE% == "debug" goto make_debug
 :end_make_debug
@@ -47,6 +52,14 @@ cd release
 cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=%PRJ_NAME% ..
 cd ..
 goto end_update
+
+:to_clean
+cd debug
+make clean
+cd ..\release
+make clean
+cd ..
+goto end_clean
 
 :make_debug
 cd debug

@@ -18,6 +18,7 @@ BUILD_TYPE="nil"
 RUN_DEBUG="nil"
 TO_TEST=0
 TO_UPDATE=0
+TO_CLEAN=0
 
 if [ x$1 != x ]; then
 	for arg in "$@" 
@@ -34,6 +35,8 @@ if [ x$1 != x ]; then
 			TO_TEST=1
 		elif [ $arg == "update" ]; then
 			TO_UPDATE=1
+		elif [ $arg == "clean" ]; then
+			TO_CLEAN=1
 		else
 			help
 			exit 1;
@@ -59,6 +62,15 @@ if [ $TO_UPDATE -eq 1 ] ; then
 	cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$PRJ_NAME ..
 	cd ..
 fi
+
+if [ $TO_CLEAN == 1 ]; then
+	cd debug
+	make clean
+	cd ../release
+	make clean
+	cd ..
+fi
+
 
 if [ $BUILD_TYPE == "debug" ] ; then
 	echo "to build debug"

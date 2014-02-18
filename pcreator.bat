@@ -30,7 +30,7 @@ exit 0
 
 
 :windows
-::echo off
+echo off
 
 :: check parameters
 if "%1" == "" goto usage

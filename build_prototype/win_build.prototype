@@ -14,33 +14,37 @@ if "%1" == "run" set RUN_DEBUG="run"
 if "%1" == "gdb" set RUN_DEBUG="debug"
 if "%1" == "test" set TO_TEST=1
 if "%1" == "clean" set TO_CLEAN=1
+if "%1" == "help" call :print_help
+if "%1" == "newfile" goto :create_new_file
 shift
 goto parse_arg
 :end_parse_arg
 
 :: handle action
-if %TO_UPDATE% == 1 goto to_update
-:end_update
+if %TO_UPDATE% == 1 call :to_update
 
-if %TO_CLEAN% == 1 goto to_clean
-:end_clean
+if %TO_CLEAN% == 1 call :to_clean
 
-if %BUILD_TYPE% == "debug" goto make_debug
-:end_make_debug
+if %BUILD_TYPE% == "debug" call :make_debug
 
-if %BUILD_TYPE% == "release" goto make_release
-:end_make_release
+if %BUILD_TYPE% == "release" call :make_release
 
-if %RUN_DEBUG% == "run" goto run_exe
-:end_run_exe
+if %RUN_DEBUG% == "run" call :run_exe
 
-if %RUN_DEBUG% == "debug" goto debug_exe
-:end_debug_exe
+if %RUN_DEBUG% == "debug" call :debug_exe
 
-if %TO_TEST% == 1 goto to_test
-:end_test
+if %TO_TEST% == 1 call :to_test
 
-goto end_build
+goto :EOF
+
+:create_new_file
+shift
+if "%1" == "" goto :EOF
+type>src\inc\%1.h 2>nul
+echo #include "%1.h">src\src\%1.cpp
+echo #include "%1.h">test\%1_test.cpp
+echo #include "gtest/gtest.h">>test\%1_test.cpp
+goto create_new_file
 
 :to_update
 if not exist debug md debug
@@ -51,7 +55,7 @@ if not exist release md release
 cd release
 cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=%PRJ_NAME% ..
 cd ..
-goto end_update
+goto :EOF
 
 :to_clean
 cd debug
@@ -59,32 +63,49 @@ make clean
 cd ..\release
 make clean
 cd ..
-goto end_clean
+goto :EOF
 
 :make_debug
 cd debug
 make
-goto end_make_debug
+goto :EOF
 
 :make_release
 cd release
 make
-goto end_make_release
+goto :EOF
 
 :run_exe
 if %BUILD_TYPE% == nil cd debug :: default run debug
-%PRJ_NAME%
-:end_run_exe
+echo to run: %PRJ_NAME%.exe
+%PRJ_NAME%.exe
+goto :EOF
 
 :debug_exe
 if %BUILD_TYPE% == nil cd debug :: default run debug
 ::gdb %PRJ_NAME%
 echo Not implement.
-:end_debug_exe
+goto :EOF
 
 :to_test
 if %BUILD_TYPE% == nil cd debug :: default test debug
-%PRJ_NAME%_test
-:end_to_test
+%PRJ_NAME%_test.exe
+goto :EOF
+
+:print_help
+echo "build.bat [debug|release|run|gdb|test|update|help]"
+echo debug       : build a debug exectuion.
+echo release     : build a release execution.
+echo run         : run the project.
+echo gdb         : use gdb to debug the project.
+echo test        : run the test.
+echo update      : update cmake files. used when new source file or
+echo               configuration changed in the project.
+echo newfile     : create new src file in src\src, src\inc and test.
+echo               this option should be the last option, because it 
+echo               threats any words afterward as a file name.
+echo help        : print this help.
+::echo if no option is given, debug will be the default one.
+goto :EOF
 
 :end_build

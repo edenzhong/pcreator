@@ -9,9 +9,24 @@ function help()
 	echo "test        : run the test."
 	echo "update      : update cmake files. used when new source file or"
 	echo "              configuration changed in the project."
+	echo "newfile     : create new src file in src\src, src\inc and test."
+	echo "              this option should be the last option, because it"
+	echo "              threats any words afterward as a file name."
 	echo "help        : print this help."
 	echo ""
 	echo "if no option is given, debug will be the default one."
+}
+
+function create_new_file()
+{
+	while [ x$1 != x ]; do
+		touch src/inc/$1.h
+		echo "#include \"$1.h\"">src/src/$1.cpp
+		echo "#include \"gtest/gtest.h\"">test/$1_test.cpp
+		echo "#include \"$1.h\"">>test/$1_test.cpp
+
+		shift
+	done
 }
 
 BUILD_TYPE="nil"
@@ -37,6 +52,10 @@ if [ x$1 != x ]; then
 			TO_UPDATE=1
 		elif [ $arg == "clean" ]; then
 			TO_CLEAN=1
+		elif [ $arg == "newfile" ]; then
+			shift
+			create_new_file $@
+			break
 		else
 			help
 			exit 1;

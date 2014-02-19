@@ -116,7 +116,8 @@ if [ $RUN_DEBUG == "debug" ];then
 	if [ $BUILD_TYPE == "nil" ] ; then
 		cd debug # default run the debug version
 	fi
-	gdb $PRJ_NAME
+	cgdb $PRJ_NAME
+	#gdb $PRJ_NAME
 fi
 
 if [ $TO_TEST == 1 ] ; then

@@ -9,7 +9,10 @@ function help()
 	echo "test        : run the test."
 	echo "update      : update cmake files. used when new source file or"
 	echo "              configuration changed in the project."
-	echo "newfile     : create new src file in src\src, src\inc and test."
+	echo "newfile     : create new src file in src/src, src/inc and test."
+	echo "              this option should be the last option, because it"
+	echo "              threats any words afterward as a file name."
+	echo "rmfile      : remove the src file in src/src, src/inc and test."
 	echo "              this option should be the last option, because it"
 	echo "              threats any words afterward as a file name."
 	echo "help        : print this help."
@@ -25,6 +28,15 @@ function create_new_file()
 		echo "#include \"gtest/gtest.h\"">test/$1_test.cpp
 		echo "#include \"$1.h\"">>test/$1_test.cpp
 
+		shift
+	done
+}
+function rm_file()
+{
+	while [ x$1 != x ]; do
+		rm src/inc/$1.h
+		rm src/src/$1.cpp
+		rm test/$1_test.cpp
 		shift
 	done
 }
@@ -55,6 +67,10 @@ if [ x$1 != x ]; then
 		elif [ $arg == "newfile" ]; then
 			shift
 			create_new_file $@
+			break
+		elif [ $arg == "rmfile" ]; then
+			shift
+			rm_file $@
 			break
 		else
 			help

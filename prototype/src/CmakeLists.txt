@@ -3,6 +3,19 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.4)
 
 PROJECT(${PRJ_NAME})
 
+if ( ${WIN32} )
+	MESSAGE(STATUS "system is win32")
+	INCLUDE(../config/winconf.cmake)
+ELSE()
+	IF ( ${APPLE} )
+		MESSAGE(STATUS "system is apple")
+		INCLUDE(../config/macconf.cmake)
+	ELSE()
+		MESSAGE(STATUS "system is linux")
+		INCLUDE(../config/linuxconf.cmake)
+	ENDIF()
+ENDIF()
+
 
 SET(PROJECT_INCLUDE_DIR "${PROJECT_SOURCE_DIR}")
 

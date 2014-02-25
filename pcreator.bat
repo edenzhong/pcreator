@@ -17,11 +17,11 @@ cp -fr prototype $2/$1
 
 # create build.bat
 cp -f build_prototype/build_header.prototype $2/$1/build.bat
-echo "PRJ_NAME=$1" >> $2/$1/build.bat
+echo "PRJ_NAME=$1">> $2/$1/build.bat
 cat build_prototype/unix_build.prototype >> $2/$1/build.bat
 echo ":windows" >> $2/$1/build.bat
 echo "@echo off" >> $2/$1/build.bat
-echo "set PRJ_NAME=$1" >> $2/$1/build.bat
+echo "set PRJ_NAME=$1">> $2/$1/build.bat
 cat build_prototype/win_build.prototype >> $2/$1/build.bat
 chmod 775 $2/$1/build.bat
 
@@ -44,11 +44,11 @@ xcopy prototype %2\%1 /E /I
 
 :: create build.bat
 copy build_prototype\build_header.prototype %2\%1\build.bat
-echo PRJ_NAME=%1 >> %2\%1\build.bat
+echo PRJ_NAME=%1>> %2\%1\build.bat
 type build_prototype\unix_build.prototype >> %2\%1\build.bat
-echo :windows >> %2\%1\build.bat
-echo @echo off >> %2\%1\build.bat
-echo set PRJ_NAME=%1 >> %2\%1\build.bat
+echo :windows>> %2\%1\build.bat
+echo @echo off>> %2\%1\build.bat
+echo set PRJ_NAME=%1>> %2\%1\build.bat
 type build_prototype\win_build.prototype >> %2\%1\build.bat
 
 

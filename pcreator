@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# check parameters
+if [ $# -ne 2 ]; then
+	echo pcreator [project_name] [path]
+	exit
+fi
+
+mkdir -p $2
+
+# get base path
+basepath=$(cd `dirname $0`; pwd)
+echo $basepath
+
+# copy prototype dir
+cp -fr $basepath/prototype $2/$1
+
+# create build for unix
+echo "#!/bin/bash">$2/$1/build
+echo "PRJ_NAME=$1">> $2/$1/build
+cat $basepath/build_prototype/unix_build.prototype >> $2/$1/build
+chmod 775 $2/$1/build
+
+# create build.bat
+echo "@echo off" > $2/$1/build.bat
+echo "set PRJ_NAME=$1">> $2/$1/build.bat
+cat $basepath/build_prototype/win_build.prototype >> $2/$1/build.bat
+
+
+exit 0

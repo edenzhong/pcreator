@@ -1,39 +1,3 @@
-@goto windows >\dev\null 2>&1 >nul
-#!\bin\bash
-
-# This script can be run in both windows and linux.
-
-
-# check parameters
-if [ $# -ne 2 ]; then
-	echo pcreator [project_name] [path]
-	exit
-fi
-
-mkdir -p $2
-
-# get base path
-basepath=$(cd `dirname $0`; pwd)
-echo $basepath
-
-# copy prototype dir
-cp -fr $basepath/prototype $2/$1
-
-# create build.bat
-cp -f $basepath/build_prototype/build_header.prototype $2/$1/build.bat
-echo "PRJ_NAME=$1">> $2/$1/build.bat
-cat $basepath/build_prototype/unix_build.prototype >> $2/$1/build.bat
-echo ":windows" >> $2/$1/build.bat
-echo "@echo off" >> $2/$1/build.bat
-echo "set PRJ_NAME=$1">> $2/$1/build.bat
-cat $basepath/build_prototype/win_build.prototype >> $2/$1/build.bat
-chmod 775 $2/$1/build.bat
-
-exit 0
-
-
-
-:windows
 echo off
 
 :: check parameters
@@ -46,19 +10,20 @@ mkdir %2
 xcopy prototype %2\%1 /E /I
 
 
+:: create build for unix
+echo #!/bin/bash>%2\%1\build
+echo PRJ_NAME=%1>> %2\%1\build
+type build_prototype\unix_build.prototype >> %2\%1\build
+
+
 :: create build.bat
-copy build_prototype\build_header.prototype %2\%1\build.bat
-echo PRJ_NAME=%1>> %2\%1\build.bat
-type build_prototype\unix_build.prototype >> %2\%1\build.bat
-echo :windows>> %2\%1\build.bat
-echo @echo off>> %2\%1\build.bat
+echo @echo off> %2\%1\build.bat
 echo set PRJ_NAME=%1>> %2\%1\build.bat
 type build_prototype\win_build.prototype >> %2\%1\build.bat
 
 
-goto end
+goto :EOF
 
 :usage
 echo usage: pcreator [project_name] [path]
-
-:end
+goto :EOF

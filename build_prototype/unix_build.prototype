@@ -47,9 +47,13 @@ TO_TEST=0
 TO_UPDATE=0
 TO_CLEAN=0
 
-if [ x$1 != x ]; then
-	for arg in "$@" 
-	do
+if [ x$1 == x ]; then
+	BUILD_TYPE="debug"
+else
+	while [ x$1 != x ]; do
+		arg=$1
+		shift
+
 		if [ $arg == "debug" ]; then
 			BUILD_TYPE="debug"
 		elif [ $arg == "release" ]; then
@@ -65,11 +69,9 @@ if [ x$1 != x ]; then
 		elif [ $arg == "clean" ]; then
 			TO_CLEAN=1
 		elif [ $arg == "newfile" ]; then
-			shift
 			create_new_file $@
 			break
 		elif [ $arg == "rmfile" ]; then
-			shift
 			rm_file $@
 			break
 		else
@@ -77,8 +79,6 @@ if [ x$1 != x ]; then
 			exit 1;
 		fi
 	done
-else
-	BUILD_TYPE="debug"
 fi
 
 # handle actions

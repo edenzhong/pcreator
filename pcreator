@@ -1,30 +1,38 @@
 #!/bin/bash
 
+echo "usage: pcreator [project_name] [path]"
+
+tpath=.
+tprj=prj
+
 # check parameters
-if [ $# -ne 2 ]; then
-	echo pcreator [project_name] [path]
-	exit
+if [ $# -ge 2 ]; then
+	tpath=$2
+fi
+if [ $# -ge 1 ]; then
+	tprj=$1
 fi
 
-mkdir -p $2
+
+mkdir -p $tpath
 
 # get base path
 basepath=$(cd `dirname $0`; pwd)
 echo $basepath
 
 # copy prototype dir
-cp -fr $basepath/prototype $2/$1
+cp -fr $basepath/prototype $tpath/$tprj
 
 # create build for unix
-echo "#!/bin/bash">$2/$1/build
-echo "PRJ_NAME=$1">> $2/$1/build
-cat $basepath/build_prototype/unix_build.prototype >> $2/$1/build
-chmod 775 $2/$1/build
+echo "#!/bin/bash">$tpath/$tprj/build
+echo "PRJ_NAME=$tprj">> $tpath/$tprj/build
+cat $basepath/build_prototype/unix_build.prototype >> $tpath/$tprj/build
+chmod 775 $tpath/$tprj/build
 
 # create build.bat
-echo "@echo off" > $2/$1/build.bat
-echo "set PRJ_NAME=$1">> $2/$1/build.bat
-cat $basepath/build_prototype/win_build.prototype >> $2/$1/build.bat
+echo "@echo off" > $tpath/$tprj/build.bat
+echo "set PRJ_NAME=$tprj">> $tpath/$tprj/build.bat
+cat $basepath/build_prototype/win_build.prototype >> $tpath/$tprj/build.bat
 
 
 exit 0

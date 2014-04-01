@@ -1,29 +1,38 @@
 echo off
 
-:: check parameters
-if "%1" == "" goto usage
-if "%2" == "" goto usage
+echo usage: pcreator [project_name] [path]
 
-mkdir %2
+set tpath=.
+set tprj=prj
+
+:: check parameters
+if "%1" == "" goto check_prj_end
+set tprj=%1
+:check_prj_end
+
+if "%2" == "" goto check_path_end
+set tpath=%2
+:check_path_end
+
+echo %tpath%
+echo %tprj%
+
+mkdir %tpath%
 
 ::copy prototype dir
-xcopy prototype %2\%1 /E /I
+xcopy prototype %tpath%\%tprj% /E /I
 
 
 :: create build for unix
-echo #!/bin/bash>%2\%1\build
-echo PRJ_NAME=%1>> %2\%1\build
-type build_prototype\unix_build.prototype >> %2\%1\build
+echo #!/bin/bash>%tpath%\%tprj%\build
+echo PRJ_NAME=%tprj%>> %tpath%\%tprj%\build
+type build_prototype\unix_build.prototype >> %tpath%\%tprj%\build
 
 
 :: create build.bat
-echo @echo off> %2\%1\build.bat
-echo set PRJ_NAME=%1>> %2\%1\build.bat
-type build_prototype\win_build.prototype >> %2\%1\build.bat
+echo @echo off> %tpath%\%tprj%\build.bat
+echo set PRJ_NAME=%tprj%>> %tpath%\%tprj%\build.bat
+type build_prototype\win_build.prototype >> %tpath%\%tprj%\build.bat
 
 
-goto :EOF
-
-:usage
-echo usage: pcreator [project_name] [path]
 goto :EOF

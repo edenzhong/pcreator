@@ -4,6 +4,9 @@ set TO_TEST=0
 set TO_UPDATE=0
 set TO_CLEAN=0
 
+:: default action
+if "%1" == "" set BUILD_TYPE="debug"
+
 :: parse arg
 :parse_arg
 if "%1" == "" goto end_parse_arg

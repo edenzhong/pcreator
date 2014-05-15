@@ -1,3 +1,4 @@
+basepath=$(cd `dirname $0`; pwd)
 function help()
 {
 	echo "build.bat [debug|release|run|gdb|test|update|help]"
@@ -88,13 +89,13 @@ if [ $TO_UPDATE -eq 1 ] ; then
 		mkdir debug
 	fi
 	cd debug
-	cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=$PRJ_NAME ..
+	cmake -DCMAKE_BUILD_TYPE=Debug -DPRJ_NAME=$PRJ_NAME $basepath
 	cd ..
 	if [ ! -d release ]; then
 		mkdir release
 	fi
 	cd release
-	cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$PRJ_NAME ..
+	cmake -DCMAKE_BUILD_TYPE=Release -DPRJ_NAME=$PRJ_NAME $basepath
 	cd ..
 fi
 

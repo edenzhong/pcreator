@@ -1,11 +1,15 @@
 #!/bin/bash
-
-echo "usage: pcreator [project_name] [path]"
+echo "pcreator"
+echo "usage: pcreator [project_name] [path] [language]"
 
 tpath=.
 tprj=prj
+language=c
 
 # check parameters
+if [ $# -ge 3 ]; then
+	language=$3
+fi
 if [ $# -ge 2 ]; then
 	tpath=$2
 fi
@@ -13,6 +17,7 @@ if [ $# -ge 1 ]; then
 	tprj=$1
 fi
 
+pt="prototype_"$language
 
 mkdir -p $tpath
 
@@ -21,7 +26,7 @@ basepath=$(cd `dirname $0`; pwd)
 echo $basepath
 
 # copy prototype dir
-cp -fr $basepath/prototype $tpath/$tprj
+cp -fr $basepath/$pt $tpath/$tprj
 
 # create build for unix
 echo "#!/bin/bash">$tpath/$tprj/build

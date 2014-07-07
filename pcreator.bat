@@ -1,9 +1,10 @@
 echo off
-
-echo usage: pcreator [project_name] [path]
+echo pcreator.bat
+echo usage: pcreator [project_name] [path] [language]
 
 set tpath=.
 set tprj=prj
+set language=c
 
 :: check parameters
 if "%1" == "" goto check_prj_end
@@ -14,13 +15,20 @@ if "%2" == "" goto check_path_end
 set tpath=%2
 :check_path_end
 
+if "%3" == "" goto check_language_end
+set language=%3
+:check_language_end
+
+
 echo %tpath%
 echo %tprj%
+
+set pt=prototype_%language%
 
 mkdir %tpath%
 
 ::copy prototype dir
-xcopy prototype %tpath%\%tprj% /E /I
+xcopy %pt% %tpath%\%tprj% /E /I
 
 
 :: create build for unix

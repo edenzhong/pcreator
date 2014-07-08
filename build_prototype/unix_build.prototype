@@ -42,11 +42,19 @@ function rm_file()
 	done
 }
 
+function get_dbg_cmd()
+{
+	command -v cgdb >/dev/null 2>&1||{
+		DEBUGGER="gdb"
+	}
+}
+
 BUILD_TYPE="nil"
 RUN_DEBUG="nil"
 TO_TEST=0
 TO_UPDATE=0
 TO_CLEAN=0
+DEBUGGER="cgdb"
 
 if [ x$1 == x ]; then
 	BUILD_TYPE="debug"
@@ -133,8 +141,8 @@ if [ $RUN_DEBUG == "debug" ];then
 	if [ $BUILD_TYPE == "nil" ] ; then
 		cd debug # default run the debug version
 	fi
-	cgdb $PRJ_NAME
-	#gdb $PRJ_NAME
+	get_dbg_cmd
+	$DEBUGGER $PRJ_NAME
 fi
 
 if [ $TO_TEST == 1 ] ; then

@@ -8,8 +8,11 @@ Usage:
     pcreator [project name] [path] [language]
   
 Then a cross platform C/C++ project will be created. 
+
 If [path] is omitted, "." will be the [path]. 
+
 if [project name] is omitted, "prj" will be the default project name. 
+
 If [language] is omitted, "c" will be the language.
 
 After a project created, you may find a script "build" in the project folder. 

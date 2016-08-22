@@ -1,7 +1,7 @@
 # test cmake file
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.4)
 
-IF ("$ENV{GTEST_DIR}" STREQUAL "")
+IF ("$ENV{GTEST_ROOT}" STREQUAL "")
 	MESSAGE(STATUS "No test building.")
 ELSE()
 	MESSAGE(STATUS "Building test")
